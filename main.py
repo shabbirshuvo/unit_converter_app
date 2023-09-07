@@ -5,6 +5,7 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from kivy.core.window import Window
+from conversion_factor import unit_dict
 
 Window.size = (500, 500)
 
@@ -12,6 +13,7 @@ Window.size = (500, 500)
 class UnitConverter(MDApp):
     def __init__(self, **kwargs):
         super().__init__()
+        self.unit_dict = unit_dict
         self.title_label = None
 
     def build(self):
