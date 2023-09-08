@@ -13,6 +13,7 @@ Window.size = (500, 500)
 class UnitConverter(MDApp):
     def __init__(self, **kwargs):
         super().__init__()
+        self.length_output = None
         self.unit_dict = unit_dict
         self.title_label = None
 
@@ -40,7 +41,8 @@ class UnitConverter(MDApp):
 
         self.length_button = Button(text='Length', pos_hint={'center_x': 0.68, 'center_y': 0.75},
                                     size_hint=(0.23, 0.17),
-                                    bold=True, font_size=30, background_color=(0.2, 0.2, 0.2, 1))
+                                    bold=True, font_size=30, background_color=(0.2, 0.2, 0.2, 1)
+                                    , on_press=self.length_converter)
         self.root.add_widget(self.length_button)
 
         self.area_button = Button(text='Area', pos_hint={'center_x': 0.28, 'center_y': 0.50}, size_hint=(0.23, 0.17),
@@ -68,6 +70,54 @@ class UnitConverter(MDApp):
         self.bmi_label = Label(text=f'BMI: {self.bmi}', pos_hint={'center_x': 0.5, 'center_y': 0.15},
                                size_hint=(0.5, 0.1), font_size=50, bold=True, color=(1, 0, 0))
         self.root.add_widget(self.bmi_label)
+
+    def convert_length(self, instance):
+        try:
+            length_input_text = self.length_input.text
+            length_input_value = float(length_input_text)
+            unit = self.length_dropdown_button.text
+            conversion_factor = self.unit_dict['Length']['conversion_factors'][unit]
+            self.length_output = length_input_value * conversion_factor
+            self.output_text_input.text = str(self.length_output)
+            print(self.length_output)
+            # self.output_label.text = f'Output: {length_output}'
+        except ValueError:
+            self.output_text_input.text = 'Invalid Input'
+
+
+    def length_converter(self, instance):
+        self.remove_widgets()
+        self.title_label.text = 'Length Converter'
+        self.back_button = Button(text='Back', pos_hint={'center_x': 0.2, 'center_y': 0.85}, size_hint=(0.2, 0.1),
+                                  bold=True, font_size=30, background_color=(1, 0, 0), on_press=self.reset_layout)
+        self.root.add_widget(self.back_button)
+        # self.length_label = Label(text='Input Length: ', pos_hint={'center_x': 0.3, 'center_y': 0.75}, size_hint=(0.3, 0.1),
+        #                          font_size=50, bold=True, color=(1, 0, 0))
+        # self.root.add_widget(self.length_label)
+        self.length_input = TextInput(hint_text='Input Length', pos_hint={'center_x': 0.5, 'center_y': 0.75},
+                                      size_hint=(0.5, 0.1))
+        self.root.add_widget(self.length_input)
+        self.length_dropdown = DropDown()
+        self.length_dropdown_button = Button(text='Units', pos_hint={'center_x': 0.3, 'center_y': 0.55},
+                                             size_hint=(0.3, 0.1), bold=True, font_size=30,
+                                             background_color=(0.2, 0.2, 0.2, 1))
+        self.length_dropdown_button.bind(on_release=self.length_dropdown.open)
+        self.length_dropdown.bind(on_select=lambda instance, x: setattr(self.length_dropdown_button, 'text', x))
+        for unit in self.unit_dict['Length']['units']:
+            self.length_dropdown.add_widget(Button(text=unit, size_hint_y=None, height=44,
+                                                    on_release=lambda instance: self.length_dropdown.select(instance.text)))
+        self.root.add_widget(self.length_dropdown_button)
+        self.convert_length_button = Button(text='Convert', pos_hint={'center_x': 0.7, 'center_y': 0.55},
+                                             size_hint=(0.3, 0.1), bold=True, font_size=30,
+                                             background_color=(0.2, 0.2, 0.2, 1), on_press=self.convert_length)
+        self.root.add_widget(self.convert_length_button)
+        # self.length_output = float(self.length_input.text) * self.unit_dict['Length']['conversion_factors'][self.length_dropdown_button.text]
+        self.output_text_input = TextInput(text='Output Length', pos_hint={'center_x': 0.5, 'center_y': 0.35},
+                                           size_hint=(0.5, 0.1), readonly=True, font_size=30)
+        self.root.add_widget(self.output_text_input)
+
+
+
 
     def bmi_converter(self, instance):
         self.remove_widgets()
@@ -109,7 +159,8 @@ class UnitConverter(MDApp):
 
         self.length_button = Button(text='Length', pos_hint={'center_x': 0.68, 'center_y': 0.75},
                                     size_hint=(0.23, 0.17),
-                                    bold=True, font_size=30, background_color=(0.2, 0.2, 0.2, 1))
+                                    bold=True, font_size=30, background_color=(0.2, 0.2, 0.2, 1),
+                                    on_press=self.length_converter)
         self.root.add_widget(self.length_button)
 
         self.area_button = Button(text='Area', pos_hint={'center_x': 0.28, 'center_y': 0.50}, size_hint=(0.23, 0.17),
