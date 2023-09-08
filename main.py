@@ -185,3 +185,8 @@ class UnitConverter(MDApp):
 
 if __name__ == '__main__':
     UnitConverter().run()
+
+
+# just the basic functionality has been implemented
+# the rest of the units can be implemented in the same way
+# the code is not very clean, but it works
